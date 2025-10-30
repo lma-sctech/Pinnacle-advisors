@@ -1,0 +1,443 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* Heatmap Viewer Styles */
+    .heatmap-container {
+        padding: 20px;
+        background: #f9fafb;
+    }
+
+    .heatmap-header {
+        background: linear-gradient(135deg, #EF4444 0%, #F59E0B 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .heatmap-header h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 700;
+    }
+
+    .heatmap-header p {
+        margin: 10px 0 0 0;
+        opacity: 0.9;
+        font-size: 16px;
+    }
+
+    /* Filters Card */
+    .filters-card {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin-bottom: 30px;
+    }
+
+    .filters-card h2 {
+        margin: 0 0 20px 0;
+        font-size: 18px;
+        font-weight: 600;
+        border-bottom: 2px solid #E5E7EB;
+        padding-bottom: 10px;
+    }
+
+    .filter-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-group label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+    }
+
+    .filter-group select,
+    .filter-group input {
+        padding: 10px;
+        border: 1px solid #D1D5DB;
+        border-radius: 6px;
+        font-size: 14px;
+        background: white;
+    }
+
+    .filter-group select:focus,
+    .filter-group input:focus {
+        outline: none;
+        border-color: #3B82F6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .apply-filters-btn {
+        padding: 10px 20px;
+        background: linear-gradient(135deg, #3B82F6 0%, #10B981 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 14px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .apply-filters-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        border-left: 4px solid #EF4444;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: #6B7280;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    /* Heatmap Display */
+    .heatmap-display {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin-bottom: 30px;
+    }
+
+    .heatmap-display h2 {
+        margin: 0 0 20px 0;
+        font-size: 18px;
+        font-weight: 600;
+        border-bottom: 2px solid #E5E7EB;
+        padding-bottom: 10px;
+    }
+
+    #heatmapCanvas {
+        width: 100%;
+        height: 600px;
+        background: #F9FAFB;
+        border: 2px dashed #D1D5DB;
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .heatmap-legend {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+        padding: 15px;
+        background: #F9FAFB;
+        border-radius: 8px;
+    }
+
+    .legend-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+        margin-right: 10px;
+    }
+
+    .legend-gradient {
+        flex: 1;
+        height: 20px;
+        background: linear-gradient(90deg,
+            rgba(0, 0, 255, 0.3) 0%,
+            rgba(0, 255, 255, 0.5) 25%,
+            rgba(0, 255, 0, 0.7) 50%,
+            rgba(255, 255, 0, 0.8) 75%,
+            rgba(255, 0, 0, 1) 100%
+        );
+        border-radius: 10px;
+    }
+
+    .legend-text {
+        font-size: 12px;
+        color: #6B7280;
+    }
+
+    /* Top Hotspots Table */
+    .hotspots-table {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin-bottom: 30px;
+    }
+
+    .hotspots-table h2 {
+        margin: 0 0 20px 0;
+        font-size: 18px;
+        font-weight: 600;
+        border-bottom: 2px solid #E5E7EB;
+        padding-bottom: 10px;
+    }
+
+    .hotspots-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .hotspots-table th,
+    .hotspots-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #F3F4F6;
+    }
+
+    .hotspots-table th {
+        background: #F9FAFB;
+        font-weight: 600;
+        font-size: 13px;
+        color: #6B7280;
+        text-transform: uppercase;
+    }
+
+    .hotspots-table td {
+        font-size: 14px;
+        color: #374151;
+    }
+
+    .hotspots-table tr:hover td {
+        background: #F9FAFB;
+    }
+
+    .intensity-bar {
+        height: 8px;
+        background: #EF4444;
+        border-radius: 4px;
+        min-width: 10px;
+    }
+
+    .no-data-message {
+        text-align: center;
+        padding: 60px 20px;
+        color: #9CA3AF;
+        font-size: 16px;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 8px 16px;
+        background: #F3F4F6;
+        color: #374151;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+
+    .back-link:hover {
+        background: #E5E7EB;
+    }
+
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .filter-row {
+            grid-template-columns: 1fr;
+        }
+
+        #heatmapCanvas {
+            height: 400px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="heatmap-container">
+    <!-- Back Link -->
+    <a href="{% url 'analytics-dashboard' %}" class="back-link">← Retour au Dashboard</a>
+
+    <!-- Header -->
+    <div class="heatmap-header">
+        <h1>Heatmap Viewer</h1>
+        <p>Visualisation des zones chaudes de clics sur vos pages</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-card">
+        <h2>Filtres</h2>
+        <form method="get" action="{% url 'analytics-heatmap' %}">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="page_url">Page URL</label>
+                    <select name="page_url" id="page_url">
+                        {% for page in all_pages %}
+                            <option value="{{ page.page_url }}" {% if page.page_url == selected_page %}selected{% endif %}>
+                                {{ page.page_url }} ({{ page.total_clicks }} clics)
+                            </option>
+                        {% empty %}
+                            <option value="">Aucune page disponible</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="days">Période</label>
+                    <select name="days" id="days">
+                        <option value="7" {% if days_filter == 7 %}selected{% endif %}>7 derniers jours</option>
+                        <option value="30" {% if days_filter == 30 %}selected{% endif %}>30 derniers jours</option>
+                        <option value="60" {% if days_filter == 60 %}selected{% endif %}>60 derniers jours</option>
+                        <option value="90" {% if days_filter == 90 %}selected{% endif %}>90 derniers jours</option>
+                    </select>
+                </div>
+
+                <div class="filter-group" style="align-self: end;">
+                    <button type="submit" class="apply-filters-btn">Appliquer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {% if selected_page %}
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Clics</div>
+                <div class="stat-value">{{ total_clicks }}</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Points Uniques</div>
+                <div class="stat-value">{{ unique_points }}</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Page Sélectionnée</div>
+                <div class="stat-value" style="font-size: 16px; word-break: break-all;">{{ selected_page }}</div>
+            </div>
+        </div>
+
+        <!-- Heatmap Display -->
+        <div class="heatmap-display">
+            <h2>Carte de Chaleur</h2>
+
+            {% if heatmap_data %}
+                <div id="heatmapCanvas"></div>
+
+                <div class="heatmap-legend">
+                    <span class="legend-label">Intensité:</span>
+                    <div class="legend-gradient"></div>
+                    <span class="legend-text">Froid → Chaud</span>
+                </div>
+            {% else %}
+                <div class="no-data-message">
+                    Aucune donnée de heatmap disponible pour cette page et cette période.
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Top Hotspots -->
+        {% if top_hotspots %}
+        <div class="hotspots-table">
+            <h2>Top 10 Zones Chaudes</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Position X</th>
+                        <th>Position Y</th>
+                        <th>Nombre de Clics</th>
+                        <th>Intensité</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hotspot in top_hotspots %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ hotspot.x_position }}px</td>
+                        <td>{{ hotspot.y_position }}px</td>
+                        <td><strong>{{ hotspot.clicks }}</strong></td>
+                        <td>
+                            <div class="intensity-bar" style="width: {{ hotspot.clicks|floatformat:0 }}px;"></div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+    {% else %}
+        <div class="no-data-message">
+            Aucune donnée de heatmap disponible. Sélectionnez une page dans les filtres.
+        </div>
+    {% endif %}
+</div>
+
+{% if heatmap_data %}
+<!-- Heatmap.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/heatmap.js@2.0.5/build/heatmap.min.js"></script>
+<script>
+    // Configuration heatmap.js
+    const heatmapInstance = h337.create({
+        container: document.getElementById('heatmapCanvas'),
+        radius: 40,
+        maxOpacity: 0.8,
+        minOpacity: 0.1,
+        blur: 0.75,
+        gradient: {
+            0.0: 'blue',
+            0.25: 'cyan',
+            0.5: 'lime',
+            0.75: 'yellow',
+            1.0: 'red'
+        }
+    });
+
+    // Données depuis le backend
+    const heatmapData = {{ heatmap_data|safe }};
+    const maxValue = {{ max_value }};
+
+    // Définir les données
+    heatmapInstance.setData({
+        max: maxValue,
+        data: heatmapData
+    });
+
+    console.log('Heatmap loaded:', heatmapData.length, 'points');
+</script>
+{% endif %}
+{% endblock %}

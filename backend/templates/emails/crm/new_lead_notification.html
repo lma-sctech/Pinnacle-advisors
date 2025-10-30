@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau Lead - {{ lead.get_qualification_display }}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #3B82F6 0%, #10B981 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .badge-hot {
+            background-color: #EF4444;
+            color: white;
+        }
+        .badge-warm {
+            background-color: #F59E0B;
+            color: white;
+        }
+        .badge-cold {
+            background-color: #6B7280;
+            color: white;
+        }
+        .content {
+            padding: 30px;
+        }
+        .score-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #F3F4F6;
+            border-radius: 8px;
+        }
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #3B82F6;
+        }
+        .score-label {
+            font-size: 14px;
+            color: #6B7280;
+            margin-top: 5px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .info-item {
+            background-color: #F9FAFB;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 3px solid #3B82F6;
+        }
+        .info-label {
+            font-size: 12px;
+            color: #6B7280;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .info-value {
+            font-size: 16px;
+            color: #111827;
+            font-weight: 500;
+        }
+        .message-box {
+            background-color: #F3F4F6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #10B981;
+        }
+        .message-box h3 {
+            margin-top: 0;
+            color: #111827;
+            font-size: 16px;
+        }
+        .message-box p {
+            margin: 0;
+            color: #4B5563;
+            white-space: pre-wrap;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #3B82F6;
+            color: white;
+            padding: 14px 28px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .cta-button:hover {
+            background-color: #2563EB;
+        }
+        .footer {
+            background-color: #F9FAFB;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #6B7280;
+            border-top: 1px solid #E5E7EB;
+        }
+        .urgency-note {
+            background-color: #FEF2F2;
+            border: 1px solid #FCA5A5;
+            color: #991B1B;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Nouveau Lead CRM</h1>
+            <span class="badge badge-{{ lead.qualification }}">
+                {{ lead.get_qualification_display }} - Score: {{ lead.score }}/100
+            </span>
+        </div>
+
+        <div class="content">
+            {% if lead.qualification == 'hot' %}
+            <div class="urgency-note">
+                <strong>ACTION REQUISE:</strong> Lead prioritaire - Contact recommandé dans les 24 heures
+            </div>
+            {% elif lead.qualification == 'warm' %}
+            <div class="urgency-note" style="background-color: #FEF3C7; border-color: #FCD34D; color: #92400E;">
+                <strong>ATTENTION:</strong> Lead à potentiel - Contact recommandé dans les 48-72 heures
+            </div>
+            {% endif %}
+
+            <div class="score-container">
+                <div class="score">{{ lead.score }}/100</div>
+                <div class="score-label">Score de qualification automatique</div>
+            </div>
+
+            <h2 style="color: #111827; margin-top: 30px;">Informations du contact</h2>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Nom</div>
+                    <div class="info-value">{{ lead.name }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">{{ lead.email }}</div>
+                </div>
+                {% if lead.phone %}
+                <div class="info-item">
+                    <div class="info-label">Téléphone</div>
+                    <div class="info-value">{{ lead.phone }}</div>
+                </div>
+                {% endif %}
+                {% if lead.company %}
+                <div class="info-item">
+                    <div class="info-label">Entreprise</div>
+                    <div class="info-value">{{ lead.company }}</div>
+                </div>
+                {% endif %}
+                <div class="info-item">
+                    <div class="info-label">Taille entreprise</div>
+                    <div class="info-value">{{ lead.get_company_size_display }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Type de besoin</div>
+                    <div class="info-value">{{ lead.need_type }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Source</div>
+                    <div class="info-value">{{ lead.get_source_display }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Date de création</div>
+                    <div class="info-value">{{ lead.created_at|date:"d/m/Y H:i" }}</div>
+                </div>
+            </div>
+
+            {% if lead.message %}
+            <div class="message-box">
+                <h3>Message du prospect</h3>
+                <p>{{ lead.message }}</p>
+            </div>
+            {% endif %}
+
+            {% if lead.estimated_budget %}
+            <div class="info-item" style="margin: 20px 0;">
+                <div class="info-label">Budget estimé</div>
+                <div class="info-value">{{ lead.estimated_budget|floatformat:0 }} €</div>
+            </div>
+            {% endif %}
+
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="http://localhost:8000/admin/crm/lead/{{ lead.id }}/change/" class="cta-button">
+                    Voir le Lead dans le CRM
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>
+                <strong>Pinnacle Supply Chain CRM</strong><br>
+                Email envoyé automatiquement - Ne pas répondre<br>
+                Lead ID: #{{ lead.id }} | Pipeline: {{ lead.pipeline|default:"Non assigné" }}
+            </p>
+        </div>
+    </div>
+</body>
+</html>

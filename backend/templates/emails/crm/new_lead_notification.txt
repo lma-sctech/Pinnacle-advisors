@@ -1,0 +1,45 @@
+========================================
+NOUVEAU LEAD CRM - {{ lead.get_qualification_display|upper }}
+========================================
+
+Score de qualification: {{ lead.score }}/100
+
+{% if lead.qualification == 'hot' %}
+*** ACTION REQUISE ***
+Lead prioritaire - Contact recommandé dans les 24 heures
+{% elif lead.qualification == 'warm' %}
+*** ATTENTION ***
+Lead à potentiel - Contact recommandé dans les 48-72 heures
+{% endif %}
+
+INFORMATIONS DU CONTACT
+----------------------------------------
+Nom:                {{ lead.name }}
+Email:              {{ lead.email }}
+{% if lead.phone %}Téléphone:          {{ lead.phone }}{% endif %}
+{% if lead.company %}Entreprise:         {{ lead.company }}{% endif %}
+Taille entreprise:  {{ lead.get_company_size_display }}
+{% if lead.position %}Poste:              {{ lead.position }}{% endif %}
+Type de besoin:     {{ lead.need_type }}
+Source:             {{ lead.get_source_display }}
+Date de création:   {{ lead.created_at|date:"d/m/Y à H:i" }}
+{% if lead.estimated_budget %}Budget estimé:      {{ lead.estimated_budget|floatformat:0 }} €{% endif %}
+
+{% if lead.message %}
+MESSAGE DU PROSPECT
+----------------------------------------
+{{ lead.message }}
+
+{% endif %}
+ACTIONS
+----------------------------------------
+Voir le lead dans le CRM:
+http://localhost:8000/admin/crm/lead/{{ lead.id }}/change/
+
+Pipeline: {{ lead.pipeline|default:"Non assigné" }}
+Lead ID: #{{ lead.id }}
+
+========================================
+Pinnacle Supply Chain CRM
+Email envoyé automatiquement - Ne pas répondre
+========================================

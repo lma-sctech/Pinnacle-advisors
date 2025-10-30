@@ -1,0 +1,643 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* God View Dashboard Styles */
+    .dashboard-container {
+        padding: 20px;
+        background: #f9fafb;
+    }
+
+    .dashboard-header {
+        background: linear-gradient(135deg, #3B82F6 0%, #10B981 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-header h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 700;
+    }
+
+    .dashboard-header p {
+        margin: 10px 0 0 0;
+        opacity: 0.9;
+        font-size: 16px;
+    }
+
+    /* KPI Cards Grid */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .kpi-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        border-left: 4px solid #3B82F6;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .kpi-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .kpi-card.green {
+        border-left-color: #10B981;
+    }
+
+    .kpi-card.orange {
+        border-left-color: #F59E0B;
+    }
+
+    .kpi-card.red {
+        border-left-color: #EF4444;
+    }
+
+    .kpi-label {
+        font-size: 14px;
+        color: #6B7280;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .kpi-value {
+        font-size: 36px;
+        font-weight: 700;
+        color: #111827;
+        line-height: 1;
+    }
+
+    .kpi-subtitle {
+        font-size: 12px;
+        color: #9CA3AF;
+        margin-top: 8px;
+    }
+
+    /* Charts Grid */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .chart-card {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .chart-card h2 {
+        margin: 0 0 20px 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #111827;
+        border-bottom: 2px solid #E5E7EB;
+        padding-bottom: 10px;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 300px;
+    }
+
+    /* Tables */
+    .data-table {
+        width: 100%;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin-bottom: 30px;
+    }
+
+    .data-table h2 {
+        margin: 0;
+        padding: 20px;
+        font-size: 18px;
+        font-weight: 600;
+        background: #F9FAFB;
+        border-bottom: 1px solid #E5E7EB;
+    }
+
+    .data-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 12px 20px;
+        text-align: left;
+        border-bottom: 1px solid #F3F4F6;
+    }
+
+    .data-table th {
+        background: #F9FAFB;
+        font-weight: 600;
+        font-size: 13px;
+        color: #6B7280;
+        text-transform: uppercase;
+    }
+
+    .data-table td {
+        font-size: 14px;
+        color: #374151;
+    }
+
+    .data-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .data-table tr:hover td {
+        background: #F9FAFB;
+    }
+
+    /* Funnel Visualization */
+    .funnel-container {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin-bottom: 30px;
+    }
+
+    .funnel-container h2 {
+        margin: 0 0 20px 0;
+        font-size: 18px;
+        font-weight: 600;
+        border-bottom: 2px solid #E5E7EB;
+        padding-bottom: 10px;
+    }
+
+    .funnel-step {
+        margin-bottom: 15px;
+        position: relative;
+    }
+
+    .funnel-step-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .funnel-step-name {
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .funnel-step-stats {
+        font-size: 14px;
+        color: #6B7280;
+    }
+
+    .funnel-bar {
+        height: 40px;
+        background: linear-gradient(90deg, #3B82F6 0%, #10B981 100%);
+        border-radius: 8px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+    }
+
+    .funnel-drop-off {
+        position: absolute;
+        right: -80px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #FEE2E2;
+        color: #DC2626;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* Badge styles */
+    .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-success {
+        background: #D1FAE5;
+        color: #065F46;
+    }
+
+    .badge-warning {
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    .badge-danger {
+        background: #FEE2E2;
+        color: #991B1B;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .kpi-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .chart-container {
+            height: 250px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h1>God View Dashboard Analytics</h1>
+        <p>Analyse complète du trafic et du comportement des utilisateurs</p>
+    </div>
+
+    <!-- KPI Cards - Aujourd'hui -->
+    <h3 style="margin-bottom: 15px; color: #374151;">KPIs Aujourd'hui</h3>
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-label">Sessions</div>
+            <div class="kpi-value">{{ sessions_today }}</div>
+            <div class="kpi-subtitle">{{ sessions_30d }} sur 30 jours</div>
+        </div>
+
+        <div class="kpi-card green">
+            <div class="kpi-label">Visiteurs Uniques</div>
+            <div class="kpi-value">{{ unique_visitors_today }}</div>
+            <div class="kpi-subtitle">{{ unique_visitors_30d }} sur 30 jours</div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-label">Pages Vues</div>
+            <div class="kpi-value">{{ pageviews_today }}</div>
+            <div class="kpi-subtitle">{{ pageviews_30d }} sur 30 jours</div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-label">Événements</div>
+            <div class="kpi-value">{{ events_today }}</div>
+            <div class="kpi-subtitle">Clics, scrolls, soumissions</div>
+        </div>
+
+        <div class="kpi-card orange">
+            <div class="kpi-label">Durée Moyenne</div>
+            <div class="kpi-value">{{ avg_duration_minutes }}m</div>
+            <div class="kpi-subtitle">Temps par session</div>
+        </div>
+
+        <div class="kpi-card {% if bounce_rate_today < 40 %}green{% elif bounce_rate_today < 60 %}orange{% else %}red{% endif %}">
+            <div class="kpi-label">Taux de Rebond</div>
+            <div class="kpi-value">{{ bounce_rate_today }}%</div>
+            <div class="kpi-subtitle">Sessions avec 1 page</div>
+        </div>
+
+        <div class="kpi-card {% if conversion_rate_today > 5 %}green{% elif conversion_rate_today > 2 %}orange{% else %}red{% endif %}">
+            <div class="kpi-label">Taux de Conversion</div>
+            <div class="kpi-value">{{ conversion_rate_today }}%</div>
+            <div class="kpi-subtitle">Sessions converties</div>
+        </div>
+    </div>
+
+    <!-- Charts Grid -->
+    <h3 style="margin: 30px 0 15px; color: #374151;">Visualisations (30 derniers jours)</h3>
+    <div class="charts-grid">
+        <!-- Évolution Sessions 7 jours -->
+        <div class="chart-card">
+            <h2>Évolution Sessions (7 derniers jours)</h2>
+            <div class="chart-container">
+                <canvas id="sessions7dChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Top 10 Pages -->
+        <div class="chart-card">
+            <h2>Top 10 Pages Visitées</h2>
+            <div class="chart-container">
+                <canvas id="topPagesChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Device Breakdown -->
+        <div class="chart-card">
+            <h2>Répartition par Appareil</h2>
+            <div class="chart-container">
+                <canvas id="deviceChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Browser Breakdown -->
+        <div class="chart-card">
+            <h2>Top 5 Navigateurs</h2>
+            <div class="chart-container">
+                <canvas id="browserChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Traffic Sources -->
+        <div class="chart-card">
+            <h2>Sources de Trafic</h2>
+            <div class="chart-container">
+                <canvas id="trafficSourcesChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Funnel de Conversion -->
+    <div class="funnel-container">
+        <h2>Funnel de Conversion (30 derniers jours)</h2>
+        {% if funnel_data.total_sessions > 0 %}
+            <p style="margin-bottom: 20px; color: #6B7280;">
+                <strong>Total sessions:</strong> {{ funnel_data.total_sessions }} |
+                <strong>Conversion finale:</strong> <span class="badge {% if funnel_data.final_conversion_rate > 5 %}badge-success{% elif funnel_data.final_conversion_rate > 2 %}badge-warning{% else %}badge-danger{% endif %}">{{ funnel_data.final_conversion_rate }}%</span>
+            </p>
+
+            {% for step in funnel_data.steps %}
+            <div class="funnel-step">
+                <div class="funnel-step-header">
+                    <span class="funnel-step-name">{{ step.name }}</span>
+                    <span class="funnel-step-stats">{{ step.count }} sessions ({{ step.rate }}%)</span>
+                </div>
+                <div style="position: relative;">
+                    <div class="funnel-bar" style="width: {{ step.rate }}%;">
+                        {{ step.rate }}%
+                    </div>
+                    {% if step.drop_off > 0 %}
+                    <div class="funnel-drop-off">-{{ step.drop_off }}%</div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #6B7280;">Aucune donnée de funnel disponible pour cette période.</p>
+        {% endif %}
+    </div>
+
+    <!-- UTM Sources Table -->
+    {% if utm_sources %}
+    <div class="data-table">
+        <h2>Top 5 Sources UTM (30 jours)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Source UTM</th>
+                    <th>Sessions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for utm in utm_sources %}
+                <tr>
+                    <td>{{ utm.utm_source }}</td>
+                    <td><strong>{{ utm.count }}</strong></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Recent Sessions Table -->
+    <div class="data-table">
+        <h2>10 Dernières Sessions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Session</th>
+                    <th>IP</th>
+                    <th>Appareil</th>
+                    <th>Navigateur</th>
+                    <th>Pages</th>
+                    <th>Durée</th>
+                    <th>Converti</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for session in recent_sessions %}
+                <tr>
+                    <td><code>{{ session.session_id|slice:":8" }}</code></td>
+                    <td>{{ session.ip_address }}</td>
+                    <td>{{ session.device_type|default:"—" }}</td>
+                    <td>{{ session.browser|truncatechars:20|default:"—" }}</td>
+                    <td>{{ session.pages_visited }}</td>
+                    <td>{{ session.duration_seconds }}s</td>
+                    <td>
+                        {% if session.converted %}
+                            <span class="badge badge-success">Oui</span>
+                        {% else %}
+                            <span class="badge badge-danger">Non</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ session.start_time|date:"d/m/Y H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" style="text-align: center; color: #9CA3AF;">Aucune session récente</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    // Configuration globale Chart.js
+    Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    Chart.defaults.color = '#6B7280';
+
+    // Colors
+    const primaryColor = '#3B82F6';
+    const secondaryColor = '#10B981';
+    const gradient = (ctx) => {
+        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.8)');
+        gradient.addColorStop(1, 'rgba(16, 185, 129, 0.8)');
+        return gradient;
+    };
+
+    // 1. Sessions 7 derniers jours (Line Chart)
+    const ctx1 = document.getElementById('sessions7dChart').getContext('2d');
+    new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: {{ sessions_7d_labels|safe }},
+            datasets: [{
+                label: 'Sessions',
+                data: {{ sessions_7d_data|safe }},
+                borderColor: primaryColor,
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                pointBackgroundColor: primaryColor,
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { precision: 0 }
+                }
+            }
+        }
+    });
+
+    // 2. Top 10 Pages (Horizontal Bar Chart)
+    const ctx2 = document.getElementById('topPagesChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: {{ top_pages_labels|safe }},
+            datasets: [{
+                label: 'Vues',
+                data: {{ top_pages_data|safe }},
+                backgroundColor: gradient(ctx2),
+                borderRadius: 6
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: { precision: 0 }
+                }
+            }
+        }
+    });
+
+    // 3. Device Breakdown (Doughnut Chart)
+    const ctx3 = document.getElementById('deviceChart').getContext('2d');
+    new Chart(ctx3, {
+        type: 'doughnut',
+        data: {
+            labels: {{ device_labels|safe }},
+            datasets: [{
+                data: {{ device_data|safe }},
+                backgroundColor: [
+                    '#3B82F6',
+                    '#10B981',
+                    '#F59E0B',
+                    '#EF4444',
+                    '#8B5CF6'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: { padding: 15 }
+                }
+            }
+        }
+    });
+
+    // 4. Browser Breakdown (Pie Chart)
+    const ctx4 = document.getElementById('browserChart').getContext('2d');
+    new Chart(ctx4, {
+        type: 'pie',
+        data: {
+            labels: {{ browser_labels|safe }},
+            datasets: [{
+                data: {{ browser_data|safe }},
+                backgroundColor: [
+                    '#3B82F6',
+                    '#10B981',
+                    '#F59E0B',
+                    '#8B5CF6',
+                    '#EC4899'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: { padding: 15 }
+                }
+            }
+        }
+    });
+
+    // 5. Traffic Sources (Bar Chart)
+    const ctx5 = document.getElementById('trafficSourcesChart').getContext('2d');
+    new Chart(ctx5, {
+        type: 'bar',
+        data: {
+            labels: {{ traffic_sources_labels|safe }},
+            datasets: [{
+                label: 'Sessions',
+                data: {{ traffic_sources_data|safe }},
+                backgroundColor: [primaryColor, secondaryColor, '#F59E0B'],
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { precision: 0 }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
