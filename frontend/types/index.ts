@@ -230,7 +230,7 @@ export interface ContactFormData {
   email: string;
   phone: string;
   company: string;
-  need_type: string;
+  need_type: 'optimization' | 'audit' | 'strategy' | 'digital' | 'training' | 'other';
   message: string;
 }
 
