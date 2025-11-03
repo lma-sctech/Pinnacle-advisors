@@ -1,0 +1,140 @@
+# Render.com Infrastructure Configuration
+# Documentation: https://render.com/docs/infrastructure-as-code
+
+services:
+  # Django Backend Web Service
+  - type: web
+    name: pinnacle-backend
+    runtime: python
+    plan: free
+    buildCommand: "./backend/build.sh"
+    startCommand: "cd backend && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
+    healthCheckPath: /api/health/
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        sync: false  # Set manually in dashboard
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pinnacle-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: pinnacle-redis
+          property: connectionString
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings
+      - key: WEB_CONCURRENCY
+        value: 2
+      - key: RENDER
+        value: true
+      # Email configuration (set manually in dashboard)
+      - key: EMAIL_BACKEND
+        value: django.core.mail.backends.smtp.EmailBackend
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PORT
+        sync: false
+      - key: EMAIL_USE_TLS
+        value: True
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        value: noreply@pinnacle-advisors.tech
+      - key: CRM_NOTIFICATION_EMAILS
+        value: contact@pinnacle-advisors.tech
+      # CORS (set to your Vercel domain)
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false  # Example: https://pinnacle-advisors.vercel.app
+
+  # Celery Worker (Background Tasks)
+  - type: worker
+    name: pinnacle-celery-worker
+    runtime: python
+    plan: free
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && celery -A config worker --loglevel=info --pool=solo"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SECRET_KEY
+        sync: false  # Same as web service
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pinnacle-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: pinnacle-redis
+          property: connectionString
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings
+      - key: RENDER
+        value: true
+      # Email vars (same as web service)
+      - key: EMAIL_BACKEND
+        value: django.core.mail.backends.smtp.EmailBackend
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PORT
+        sync: false
+      - key: EMAIL_USE_TLS
+        value: True
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        value: noreply@pinnacle-advisors.tech
+      - key: CRM_NOTIFICATION_EMAILS
+        value: contact@pinnacle-advisors.tech
+
+  # Celery Beat (Scheduled Tasks)
+  # Note: Consider enabling later if needed (uses additional free tier hours)
+  # - type: worker
+  #   name: pinnacle-celery-beat
+  #   runtime: python
+  #   plan: free
+  #   buildCommand: "cd backend && pip install -r requirements.txt"
+  #   startCommand: "cd backend && celery -A config beat --loglevel=info"
+  #   envVars:
+  #     - key: PYTHON_VERSION
+  #       value: 3.11.9
+  #     - key: SECRET_KEY
+  #       sync: false
+  #     - key: DATABASE_URL
+  #       fromDatabase:
+  #         name: pinnacle-db
+  #         property: connectionString
+  #     - key: REDIS_URL
+  #       fromService:
+  #         type: redis
+  #         name: pinnacle-redis
+  #         property: connectionString
+  #     - key: DJANGO_SETTINGS_MODULE
+  #       value: config.settings
+  #     - key: RENDER
+  #       value: true
+
+databases:
+  # PostgreSQL Database (Free tier: 90 days, then renew or upgrade)
+  - name: pinnacle-db
+    plan: free
+    databaseName: pinnacle_db
+    user: pinnacle_user
+    region: frankfurt  # Choose: oregon, frankfurt, singapore
+
+  # Redis Cache (Free tier: 25MB)
+  - name: pinnacle-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+    region: frankfurt  # Same as database for better latency
