@@ -116,7 +116,7 @@ export const Hero: React.FC = () => {
                 about.years_experience > 0 && { value: `${about.years_experience}+`, label: 'Ans d\'expérience' },
                 about.clients_count > 0 && { value: `${about.clients_count}+`, label: 'Clients accompagnés' },
                 about.projects_count > 0 && { value: `${about.projects_count}+`, label: 'Projets réalisés' },
-              ].filter(Boolean).map((stat, index) => (
+              ].filter((stat): stat is { value: string; label: string } => Boolean(stat)).map((stat, index) => (
                 <motion.div
                   key={index}
                   className="text-white"

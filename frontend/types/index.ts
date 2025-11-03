@@ -196,7 +196,7 @@ export interface PageView {
 
 export interface AnalyticsEvent {
   session_id?: string;
-  event_type: 'click' | 'scroll' | 'form_submit' | 'download' | 'button';
+  event_type: string;
   event_action: string;
   element_text?: string;
   x_position?: number;
@@ -246,7 +246,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   rightIcon?: React.ReactNode;
 }
 
-export interface CardProps {
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   className?: string;
   hover?: boolean;

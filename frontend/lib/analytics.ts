@@ -125,7 +125,7 @@ class Analytics {
 
     // Formater les données pour l'API backend
     const event = {
-      session_id: this.sessionId,
+      session_id: this.sessionId ?? undefined,
       event_type: eventType,
       event_action: eventType, // Utiliser eventType comme action
       element_text: element?.textContent || JSON.stringify(eventData),

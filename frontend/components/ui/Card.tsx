@@ -14,6 +14,7 @@ export const Card: React.FC<CardProps> = ({
   className,
   hover = false,
   padding = 'md',
+  ...rest
 }) => {
   return (
     <div
@@ -23,6 +24,7 @@ export const Card: React.FC<CardProps> = ({
         paddingVariants[padding],
         className
       )}
+      {...rest}
     >
       {children}
     </div>
