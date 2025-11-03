@@ -32,8 +32,12 @@ echo "[4/5] Creating cache table (if needed)..."
 python manage.py createcachetable || echo "Cache table already exists or not needed"
 
 echo ""
-echo "[5/5] Build verification..."
+echo "[5/6] Build verification..."
 python manage.py check --deploy
+
+echo ""
+echo "[6/6] Setup production (superuser + data)..."
+python setup_production.py
 
 echo ""
 echo "========================================="
