@@ -35,12 +35,31 @@ export async function generateMetadata(): Promise<Metadata> {
           canonical: '/',
         },
         openGraph: {
-          title: seoSettings.og_title,
-          description: seoSettings.og_description,
           type: 'website',
           locale: seoSettings.og_locale,
+          title: seoSettings.og_title,
+          description: seoSettings.og_description,
+          siteName: 'Pinnacle Advisors',
+          url: 'https://pinnacle-advisors.tech',
+          images: seoSettings.og_image ? [
+            {
+              url: seoSettings.og_image,
+              width: 1200,
+              height: 630,
+              alt: 'Pinnacle Advisors - Cabinet de Conseil Expert en Supply Chain',
+            },
+          ] : undefined,
+        },
+        twitter: {
+          card: 'summary_large_image',
+          title: seoSettings.meta_title,
+          description: seoSettings.meta_description,
           images: seoSettings.og_image ? [seoSettings.og_image] : undefined,
         },
+        themeColor: [
+          { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+          { media: '(prefers-color-scheme: dark)', color: '#1a1a1a' },
+        ],
       };
     }
   } catch (error) {
@@ -58,11 +77,22 @@ export async function generateMetadata(): Promise<Metadata> {
       canonical: '/',
     },
     openGraph: {
-      title: 'Pinnacle Advisors - Cabinet de Conseil Expert',
-      description: 'Transformez votre supply chain en avantage compétitif',
       type: 'website',
       locale: 'fr_FR',
+      title: 'Pinnacle Advisors - Cabinet de Conseil Expert',
+      description: 'Transformez votre supply chain en avantage compétitif',
+      siteName: 'Pinnacle Advisors',
+      url: 'https://pinnacle-advisors.tech',
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Pinnacle Advisors - Cabinet de Conseil Expert',
+      description: 'Cabinet de conseil spécialisé en optimisation et transformation des chaînes d\'approvisionnement.',
+    },
+    themeColor: [
+      { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+      { media: '(prefers-color-scheme: dark)', color: '#1a1a1a' },
+    ],
   };
 }
 
