@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
@@ -79,10 +80,13 @@ export const Team: React.FC = () => {
                 {/* Photo (Placeholder) */}
                 <div className="relative h-64 bg-gradient-to-br from-primary-400 to-success-400 overflow-hidden">
                   {member.photo ? (
-                    <img
+                    <Image
                       src={member.photo}
-                      alt={member.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      alt={`Photo de ${member.name}, ${member.position}`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
