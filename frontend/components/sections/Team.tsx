@@ -7,6 +7,39 @@ import { useQuery } from '@tanstack/react-query';
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
 import { fetchTeam, fetchRecruitment, fetchTeamHeader, queryKeys } from '@/lib/api';
 import { Card } from '@/components/ui';
+import type { TeamMember } from '@/types';
+
+/**
+ * Composant JSON-LD pour le Person Schema
+ * Améliore le référencement en fournissant des données structurées sur l'équipe
+ */
+function PersonListSchema({ team }: { team: TeamMember[] }) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: team.map((member, index) => ({
+      '@type': 'Person',
+      position: index + 1,
+      name: member.name,
+      jobTitle: member.position,
+      description: member.bio,
+      image: member.photo,
+      email: member.email,
+      url: member.linkedin_url,
+      worksFor: {
+        '@type': 'Organization',
+        name: 'Pinnacle Advisors',
+      },
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
 
 export const Team: React.FC = () => {
   const { data: team = [], isLoading } = useQuery({
@@ -43,6 +76,7 @@ export const Team: React.FC = () => {
 
   return (
     <section id="team" className="section bg-gradient-bg">
+      <PersonListSchema team={team} />
       <div className="container">
         {/* Section Header */}
         <motion.div

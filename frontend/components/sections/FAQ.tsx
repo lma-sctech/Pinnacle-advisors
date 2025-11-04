@@ -6,6 +6,41 @@ import { useQuery } from '@tanstack/react-query';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { fetchFAQ, queryKeys } from '@/lib/api';
 import { cn } from '@/lib/utils';
+import type { FAQCategory } from '@/types';
+
+/**
+ * Composant JSON-LD pour le FAQPage Schema
+ * Améliore le référencement en fournissant des données structurées sur les FAQ
+ */
+function FAQPageSchema({ categories }: { categories: FAQCategory[] }) {
+  const allQuestions = categories.flatMap(cat =>
+    (cat.questions || [])
+      .filter(q => q.is_published && q.is_active)
+      .map(q => ({
+        '@type': 'Question',
+        name: q.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: q.answer,
+        },
+      }))
+  );
+
+  if (allQuestions.length === 0) return null;
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: allQuestions,
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
 
 export const FAQ: React.FC = () => {
   const { data: categories = [], isLoading } = useQuery({
@@ -59,6 +94,7 @@ export const FAQ: React.FC = () => {
 
   return (
     <section id="faq" className="section bg-white">
+      <FAQPageSchema categories={categories} />
       <div className="container">
         {/* Section Header */}
         <motion.div

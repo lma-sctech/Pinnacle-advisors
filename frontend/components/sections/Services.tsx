@@ -15,6 +15,35 @@ import {
 } from '@heroicons/react/24/outline';
 import { fetchServices, queryKeys } from '@/lib/api';
 import { Card, CardTitle, CardDescription } from '@/components/ui';
+import type { Service } from '@/types';
+
+/**
+ * Composant JSON-LD pour le Service Schema
+ * Améliore le référencement en fournissant des données structurées sur les services
+ */
+function ServiceSchema({ services }: { services: Service[] }) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: services.map((service, index) => ({
+      '@type': 'Service',
+      position: index + 1,
+      name: service.title,
+      description: service.description,
+      provider: {
+        '@type': 'ProfessionalService',
+        name: 'Pinnacle Advisors',
+      },
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
 
 // Icon mapping
 const iconMap: Record<string, React.ElementType> = {
@@ -55,6 +84,7 @@ export const Services: React.FC = () => {
 
   return (
     <section id="services" className="section bg-gradient-bg">
+      <ServiceSchema services={services} />
       <div className="container">
         {/* Section Header */}
         <motion.div
