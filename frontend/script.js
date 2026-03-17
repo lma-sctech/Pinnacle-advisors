@@ -39,6 +39,8 @@ const approachDetailImpact = document.querySelector("#approach-detail-impact");
 const approachDetailImpactBlock = document.querySelector(".approach-detail__block--impact");
 const contextCarouselTrack = document.querySelector("#context-carousel-track");
 const contextCarouselViewport = document.querySelector("#context-carousel-viewport");
+const scrollTopButton = document.querySelector(".scroll-top-button");
+const heroSlides = document.querySelectorAll(".hero-slide");
 const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
 let contextAutoplayInterval = null;
 let contextAutoplayResumeTimeout = null;
@@ -47,6 +49,9 @@ let contextAllCards = [];
 let contextRealCards = [];
 let contextLoopSpan = 0;
 let isContextAutoScrolling = false;
+let heroSlideIndex = 0;
+let activeModalType = null;
+let ignoreNextModalPopstate = false;
 
 const expertiseContent = {
   strategie: {
@@ -850,6 +855,8 @@ function openExpertiseModal(key) {
   renderList(expertiseModalOutcomes, content.outcomes);
   renderList(expertiseModalContexts, content.contexts);
 
+  activeModalType = "expertise";
+  window.history.pushState({ pinnacleModal: "expertise" }, "", window.location.href);
   expertiseModal.classList.add("is-open");
   expertiseModal.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
@@ -857,8 +864,14 @@ function openExpertiseModal(key) {
 
 function closeExpertiseModal() {
   if (!expertiseModal) return;
+  if (activeModalType === "expertise" && window.history.state?.pinnacleModal === "expertise") {
+    ignoreNextModalPopstate = true;
+    window.history.back();
+    return;
+  }
   expertiseModal.classList.remove("is-open");
   expertiseModal.setAttribute("aria-hidden", "true");
+  activeModalType = null;
   document.body.style.overflow = "";
 }
 
@@ -872,6 +885,8 @@ function openInsightModal(key) {
   if (insightModalSubtitle) insightModalSubtitle.textContent = content.subtitle;
   renderInsightParagraphs(insightModalBody, content.paragraphs, content.quoteIndex ?? null);
 
+  activeModalType = "insight";
+  window.history.pushState({ pinnacleModal: "insight" }, "", window.location.href);
   insightModal.classList.add("is-open");
   insightModal.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
@@ -879,8 +894,14 @@ function openInsightModal(key) {
 
 function closeInsightModal() {
   if (!insightModal) return;
+  if (activeModalType === "insight" && window.history.state?.pinnacleModal === "insight") {
+    ignoreNextModalPopstate = true;
+    window.history.back();
+    return;
+  }
   insightModal.classList.remove("is-open");
   insightModal.setAttribute("aria-hidden", "true");
+  activeModalType = null;
   document.body.style.overflow = "";
 }
 
@@ -899,6 +920,8 @@ function openPerspectiveModal() {
     perspectiveModalConclusion.innerHTML = `<p>${perspectiveContent.conclusion}</p>`;
   }
 
+  activeModalType = "perspective";
+  window.history.pushState({ pinnacleModal: "perspective" }, "", window.location.href);
   perspectiveModal.classList.add("is-open");
   perspectiveModal.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
@@ -906,9 +929,40 @@ function openPerspectiveModal() {
 
 function closePerspectiveModal() {
   if (!perspectiveModal) return;
+  if (activeModalType === "perspective" && window.history.state?.pinnacleModal === "perspective") {
+    ignoreNextModalPopstate = true;
+    window.history.back();
+    return;
+  }
   perspectiveModal.classList.remove("is-open");
   perspectiveModal.setAttribute("aria-hidden", "true");
+  activeModalType = null;
   document.body.style.overflow = "";
+}
+
+function forceCloseAllModals() {
+  expertiseModal?.classList.remove("is-open");
+  expertiseModal?.setAttribute("aria-hidden", "true");
+  insightModal?.classList.remove("is-open");
+  insightModal?.setAttribute("aria-hidden", "true");
+  perspectiveModal?.classList.remove("is-open");
+  perspectiveModal?.setAttribute("aria-hidden", "true");
+  activeModalType = null;
+  document.body.style.overflow = "";
+}
+
+function updateScrollTopButton() {
+  if (!scrollTopButton) return;
+  const shouldShow = window.scrollY > 520;
+  scrollTopButton.classList.toggle("is-visible", shouldShow);
+}
+
+function setActiveHeroSlide(index) {
+  if (!heroSlides.length) return;
+  heroSlideIndex = (index + heroSlides.length) % heroSlides.length;
+  heroSlides.forEach((slide, slideIndex) => {
+    slide.classList.toggle("is-active", slideIndex === heroSlideIndex);
+  });
 }
 
 expertiseTriggers.forEach((trigger) => {
@@ -968,4 +1022,29 @@ window.addEventListener("keydown", (event) => {
     closePerspectiveModal();
   }
 });
+
+window.addEventListener("popstate", () => {
+  if (ignoreNextModalPopstate) {
+    ignoreNextModalPopstate = false;
+    forceCloseAllModals();
+    return;
+  }
+
+  if (activeModalType) {
+    forceCloseAllModals();
+  }
+});
+
+scrollTopButton?.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+window.addEventListener("scroll", updateScrollTopButton, { passive: true });
+updateScrollTopButton();
+
+if (heroSlides.length > 1) {
+  window.setInterval(() => {
+    setActiveHeroSlide(heroSlideIndex + 1);
+  }, 2000);
+}
 

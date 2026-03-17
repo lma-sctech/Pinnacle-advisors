@@ -1,0 +1,22 @@
+# Image Metadata
+
+Source folder: `frontend/img`
+
+Note: some image metadata fields render the copyright symbol as `?` depending on the format/reader. The stored values were normalized for Pinnacle Advisors.
+
+| File | Format | Dimensions | Size (KB) | Author | Artist | Creator | Title | Copyright | Description | Comment |
+| --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- |
+| `image-slot-expertise-1-1.png` | PNG | 1536x1024 | 2072.8 | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Copyright ? 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
+| `image-slot-expertise-1-2.png` | PNG | 1536x1024 | 2539.8 | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Copyright ? 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
+| `image-slot-expertise-2.png` | PNG | 1536x1024 | 2550.2 | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Copyright ? 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
+| `image-slot-expertise-3-1.jpg` | JPEG | 5628x3752 | 1939.6 | Pinnacle Advisors | Pinnacle Advisors |  | Pinnacle Advisors | Copyright 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
+| `image-slot-expertise-4.png` | PNG | 1536x1024 | 2072.4 | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Copyright ? 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
+| `image-slot-hero-1-2.jpg` | JPEG | 4608x3072 | 2388.6 | Pinnacle Advisors | Pinnacle Advisors |  | Pinnacle Advisors | Copyright 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
+| `image-slot-hero-1-3.jpg` | JPEG | 3964x5409 | 3507.0 | Pinnacle Advisors | Pinnacle Advisors |  | Pinnacle Advisors | Copyright 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
+| `image-slot-hero-1.png` | PNG | 1536x1024 | 2280.9 | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Copyright ? 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
+| `image-slot-hero-2.jpg` | JPEG | 4032x3024 | 1900.0 | Pinnacle Advisors | Pinnacle Advisors |  | Pinnacle Advisors | Copyright 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
+| `image-slot-hero-3.png` | PNG | 1536x1024 | 3063.4 | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Copyright ? 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
+| `image-slot-side-a-1.png` | PNG | 1536x1024 | 1918.1 | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Copyright ? 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
+| `image-slot-side-a-2.png` | PNG | 1536x1024 | 1924.9 | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Copyright ? 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
+| `image-slot-side-a-3.png` | PNG | 1024x1536 | 1823.3 | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Copyright ? 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
+| `image-slot-wide-dark.png` | PNG | 1536x1024 | 2489.9 | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Pinnacle Advisors | Copyright ? 2026 Pinnacle Advisors. All rights reserved. | All rights reserved to Pinnacle Advisors. | Copyright ? 2026 Pinnacle Advisors. All rights reserved. |
