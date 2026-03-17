@@ -147,6 +147,10 @@ a {
   gap: 0.4rem;
 }
 
+.language-switcher-mobile {
+  display: none;
+}
+
 .language-flag {
   display: inline-flex;
   align-items: center;
@@ -1518,6 +1522,7 @@ a {
     grid-column: 1 / -1;
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.85rem;
     padding-bottom: 1rem;
   }
 
@@ -1531,6 +1536,11 @@ a {
 
   .header-cta {
     display: none;
+  }
+
+  .language-switcher-mobile {
+    display: inline-flex;
+    margin-top: 0.35rem;
   }
 
   .cards-grid-2,
