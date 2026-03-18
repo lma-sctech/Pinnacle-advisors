@@ -158,6 +158,26 @@ function renderList(container, items) {
   container.innerHTML = items.map((item) => `<li>${item}</li>`).join("");
 }
 
+function refreshContextCardCollections() {
+  if (!contextCarouselTrack) {
+    contextAllCards = [];
+    contextRealCards = [];
+    return;
+  }
+
+  contextAllCards = Array.from(contextCarouselTrack.querySelectorAll(".context-card"));
+  contextRealCards = contextAllCards.filter((card) => card.dataset.clone !== "true");
+  recalculateContextLoopSpan();
+}
+
+function animateImpactList() {
+  if (!approachDetailImpactBlock) return;
+
+  approachDetailImpactBlock.classList.remove("is-animating");
+  void approachDetailImpactBlock.offsetWidth;
+  approachDetailImpactBlock.classList.add("is-animating");
+}
+
 function setupContextCarouselLoop() {
   if (!contextCarouselTrack || !contextCarouselViewport) return;
   if (contextCarouselTrack.dataset.loopReady === "true") {
@@ -395,7 +415,7 @@ contextCarouselViewport?.addEventListener("pointerup", scheduleContextAutoplayRe
 contextCarouselViewport?.addEventListener("mouseenter", stopContextAutoplay);
 contextCarouselViewport?.addEventListener("mouseleave", scheduleContextAutoplayResume);
 window.addEventListener("resize", () => {
-  recalculateContextLoopSpan();
+  refreshContextCardCollections();
   normalizeContextCarouselLoop();
   updateContextGlide();
   scheduleContextAutoplayResume();
