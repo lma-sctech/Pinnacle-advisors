@@ -1,3 +1,26 @@
+function bootstrapTracking() {
+  const initTracking = () => window.PinnacleTracking?.init?.();
+  if (window.PinnacleTracking) {
+    initTracking();
+    return;
+  }
+
+  const existingTrackingScript = document.querySelector("script[data-pinnacle-tracking='true']");
+  if (existingTrackingScript) {
+    existingTrackingScript.addEventListener("load", initTracking, { once: true });
+    return;
+  }
+
+  const trackingScript = document.createElement("script");
+  trackingScript.src = new URL("./tracking.js", document.currentScript?.src || window.location.href).href;
+  trackingScript.async = true;
+  trackingScript.dataset.pinnacleTracking = "true";
+  trackingScript.addEventListener("load", initTracking, { once: true });
+  document.head.appendChild(trackingScript);
+}
+
+bootstrapTracking();
+
 const pageMenuButton = document.querySelector(".menu-button");
 const pageSiteNav = document.querySelector(".site-nav");
 const pageNavLinks = document.querySelectorAll(".site-nav a");
