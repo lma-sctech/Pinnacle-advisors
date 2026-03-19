@@ -96,12 +96,14 @@ def render_footer(
     locale: dict[str, str],
     *,
     logo_path: str,
+    home_path: str,
     footer_links: list[tuple[str, str]],
 ) -> str:
     return render(
         read_text(SRC / "partials" / "footer.html"),
         {
             "logo_path": logo_path,
+            "home_path": home_path,
             "footer_text": locale["footer_text"],
             "footer_copyright": locale["footer_copyright"],
             "footer_links": build_footer_links(footer_links),
@@ -136,6 +138,7 @@ def build_home_pages() -> None:
         footer = render_footer(
             locale,
             logo_path="./logo-pinnacle.png",
+            home_path="#top",
             footer_links=[
                 ("#about", locale["nav_about"]),
                 ("#expertises", locale["nav_expertises"]),
@@ -195,6 +198,7 @@ def build_internal_family(data_file_name: str) -> None:
         footer = render_footer(
             locale,
             logo_path="../../logo-pinnacle.png",
+            home_path=home_path,
             footer_links=[
                 (f"{home_path}#expertises", locale["nav_expertises"]),
                 (f"{home_path}#approach", locale["nav_approach"]),
