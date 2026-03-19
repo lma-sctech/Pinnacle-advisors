@@ -6,7 +6,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "src"
 DIST = ROOT / "dist"
-LEGACY = ROOT.parent / "frontend"
 
 
 def read_text(path: Path) -> str:
@@ -27,16 +26,14 @@ def load_locales() -> dict[str, dict[str, str]]:
 def copy_assets() -> None:
     DIST.mkdir(parents=True, exist_ok=True)
 
-    for file_name in ["styles.css", "script.js", "script-en.js", "logo-pinnacle.png", "robots.txt", "sitemap.xml"]:
-        source = LEGACY / file_name
-        if source.exists():
-            shutil.copy2(source, DIST / file_name)
 
-    for directory_name in ["js", "img"]:
-        source_dir = LEGACY / directory_name
-        target_dir = DIST / directory_name
-        if source_dir.exists():
-            shutil.copytree(source_dir, target_dir, dirs_exist_ok=True)
+def clean_generated_html() -> None:
+    for html_file in DIST.glob("*.html"):
+        html_file.unlink()
+
+    pages_dir = DIST / "pages"
+    if pages_dir.exists():
+        shutil.rmtree(pages_dir)
 
 
 def get_root_page_context(config: dict[str, str]) -> dict[str, str]:
@@ -236,11 +233,12 @@ def build_internal_family(data_file_name: str) -> None:
 
 def main() -> None:
     copy_assets()
+    clean_generated_html()
     build_home_pages()
     build_internal_family("insights.json")
     build_internal_family("expertise.json")
     build_internal_family("perspective.json")
-    print(f"frontend-v2 dist generated in {DIST}")
+    print(f"frontend dist generated in {DIST}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,4 @@
+{
+  "buildCommand": "cd frontend && python build.py",
+  "outputDirectory": "frontend/dist"
+}
