@@ -1,0 +1,32 @@
+{
+  "fr": {
+    "brand_location": "Maroc",
+    "menu_label": "Menu",
+    "nav_about": "À propos",
+    "nav_expertises": "Expertises",
+    "nav_approach": "Approche",
+    "nav_insights": "Points de vue",
+    "nav_contact": "Contact",
+    "language_aria": "Choix de la langue",
+    "fr_aria_label": "Version française",
+    "en_aria_label": "English version",
+    "header_cta": "Nous contacter",
+    "footer_text": "Conseil en transformation supply chain, opérations logistiques et pilotage de la performance",
+    "footer_copyright": "© 2026 Pinnacle Advisors. Tous droits réservés."
+  },
+  "en": {
+    "brand_location": "Morocco",
+    "menu_label": "Menu",
+    "nav_about": "About",
+    "nav_expertises": "Expertise",
+    "nav_approach": "Approach",
+    "nav_insights": "Insights",
+    "nav_contact": "Contact",
+    "language_aria": "Language selection",
+    "fr_aria_label": "Version française",
+    "en_aria_label": "English version",
+    "header_cta": "Contact us",
+    "footer_text": "Supply chain transformation, logistics operations and performance management consulting",
+    "footer_copyright": "© 2026 Pinnacle Advisors. All rights reserved."
+  }
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "lang": "fr",
+    "output": "index.html",
+    "content_path": "src/content/home/fr/index.html",
+    "title": "Pinnacle Advisors | Conseil en transformation supply chain",
+    "meta_description": "Pinnacle Advisors accompagne les transformations supply chain, logistiques, digitales et data dans des environnements exigeants.",
+    "canonical": "/index.html",
+    "hreflang_fr": "/index.html",
+    "hreflang_en": "/index-en.html",
+    "hreflang_default": "/index.html",
+    "header_partial": "header-fr.html",
+    "footer_partial": "footer-fr.html",
+    "page_scripts": "<button class=\"scroll-top-button\" type=\"button\" aria-label=\"Revenir en haut de la page\">↑</button>\n<script src=\"./script.js\"></script>"
+  },
+  {
+    "lang": "en",
+    "output": "index-en.html",
+    "content_path": "src/content/home/en/index-en.html",
+    "title": "Pinnacle Advisors | Supply Chain Transformation Consulting",
+    "meta_description": "Pinnacle Advisors supports supply chain, logistics, digital and data transformations in demanding environments.",
+    "canonical": "/index-en.html",
+    "hreflang_fr": "/index.html",
+    "hreflang_en": "/index-en.html",
+    "hreflang_default": "/index.html",
+    "header_partial": "header-en.html",
+    "footer_partial": "footer-en.html",
+    "page_scripts": "<button class=\"scroll-top-button\" type=\"button\" aria-label=\"Back to top\">↑</button>\n<script src=\"./script-en.js\"></script>"
+  }
+]

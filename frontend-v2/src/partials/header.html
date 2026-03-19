@@ -1,0 +1,32 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="{{ home_path }}">
+      <img class="brand-logo" src="{{ logo_path }}" alt="Pinnacle Advisors" />
+      <span class="brand-location">{{ brand_location }}</span>
+    </a>
+
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">
+      {{ menu_label }}
+    </button>
+
+    <nav id="site-nav" class="site-nav">
+      <a href="{{ about_href }}">{{ nav_about }}</a>
+      <a href="{{ expertises_href }}">{{ nav_expertises }}</a>
+      <a href="{{ approach_href }}">{{ nav_approach }}</a>
+      <a href="{{ insights_href }}">{{ nav_insights }}</a>
+      <a href="{{ contact_href }}">{{ nav_contact }}</a>
+      <div class="language-switcher language-switcher-mobile" aria-label="{{ language_aria }}">
+        <a class="{{ fr_class }}" href="{{ fr_href }}"{{ fr_aria_current }} aria-label="{{ fr_aria_label }}">FR</a>
+        <a class="{{ en_class }}" href="{{ en_href }}"{{ en_aria_current }} aria-label="{{ en_aria_label }}">EN</a>
+      </div>
+    </nav>
+
+    <div class="header-actions">
+      <a class="header-cta" href="{{ contact_href }}">{{ header_cta }}</a>
+      <div class="language-switcher" aria-label="{{ language_aria }}">
+        <a class="{{ fr_class }}" href="{{ fr_href }}"{{ fr_aria_current }} aria-label="{{ fr_aria_label }}">FR</a>
+        <a class="{{ en_class }}" href="{{ en_href }}"{{ en_aria_current }} aria-label="{{ en_aria_label }}">EN</a>
+      </div>
+    </div>
+  </div>
+</header>

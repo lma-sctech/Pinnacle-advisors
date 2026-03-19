@@ -93,7 +93,7 @@ a {
   font-weight: 700;
   letter-spacing: 0.12em;
   line-height: 1;
-  margin-top: -0.46rem;
+  margin-top: -0.78rem;
 }
 
 .site-nav {
@@ -1386,6 +1386,14 @@ a {
   font-size: 1.06rem;
 }
 
+.section-opener {
+  margin: 0 0 0.95rem;
+  color: var(--ink);
+  font-size: 1.16rem;
+  font-weight: 600;
+  line-height: 1.7;
+}
+
 .page-meta,
 .page-card,
 .steering-row,
@@ -1426,6 +1434,90 @@ a {
 .page-grid {
   grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
   align-items: start;
+}
+
+.article-intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.82fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.article-intro-flow,
+.article-body-flow {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.article-body {
+  margin-top: 1.4rem;
+}
+
+.article-body-flow {
+  width: min(100%, 920px);
+  margin: 0 auto;
+}
+
+.article-layout--editorial .page-section--related-wide {
+  width: min(100%, 1120px);
+  max-width: none;
+  margin: 0 auto;
+}
+
+.article-layout--editorial .page-sidebar {
+  gap: 1.2rem;
+}
+
+.page-grid--reading-wide {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.page-grid--expertise {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.page-sections--expertise {
+  width: min(100%, 980px);
+  margin: 0 auto;
+}
+
+.page-sections--expertise .page-section--related-wide,
+.page-sections--expertise .cta-panel--expertise {
+  width: min(100%, 1120px);
+  max-width: none;
+  margin: 0 auto;
+}
+
+.page-sections--expertise .cta-panel--expertise {
+  margin-top: 0.2rem;
+}
+
+.page-grid--reading-wide .page-sidebar {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 901px) {
+  .page-shell--reading-wide .page-main .container {
+    width: min(calc(100% - 40px), 1400px);
+  }
+
+  .page-shell--reading-wide .page-grid--reading-wide .page-section--narrow {
+    width: min(100%, 760px);
+    max-width: 760px;
+    justify-self: start;
+  }
+
+  .page-shell--reading-wide .page-grid--reading-wide .page-sections,
+  .page-shell--reading-wide .page-grid--reading-wide .page-section:not(.page-section--narrow),
+  .page-shell--reading-wide .page-grid--reading-wide .page-card {
+    width: 100%;
+    max-width: none;
+  }
+
+  .page-shell--reading-wide .page-grid--reading-wide .page-sidebar {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 760px;
+  }
 }
 
 .page-sections {
@@ -1550,10 +1642,16 @@ a {
   .page-hero__grid,
   .page-intro-grid,
   .page-grid,
+  .article-intro-grid,
   .page-cta,
   .related-grid,
   .steering-pills {
     grid-template-columns: 1fr;
+  }
+
+  .article-body-flow,
+  .article-layout--editorial .page-section--related-wide {
+    width: 100%;
   }
 
   .page-title {

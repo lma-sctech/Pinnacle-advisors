@@ -1,0 +1,28 @@
+[
+  {
+    "lang": "fr",
+    "output_path": "pages/fr/perspective-cabinet-performance-supply-chain-robuste.html",
+    "content_path": "src/content/perspective/fr/perspective-cabinet-performance-supply-chain-robuste.html",
+    "title": "Perspective cabinet supply chain 2026-2036 | Pinnacle Advisors",
+    "meta_description": "Perspective supply chain 2026-2036 sur la résilience, les forces motrices, les recommandations et la grille de pilotage stratégique.",
+    "canonical": "/pages/fr/perspective-cabinet-performance-supply-chain-robuste.html",
+    "hreflang_fr": "/pages/fr/perspective-cabinet-performance-supply-chain-robuste.html",
+    "hreflang_en": "/pages/en/firm-perspective-building-more-robust-supply-chain-performance.html",
+    "hreflang_default": "/index.html",
+    "fr_href": "../fr/perspective-cabinet-performance-supply-chain-robuste.html",
+    "en_href": "../en/firm-perspective-building-more-robust-supply-chain-performance.html"
+  },
+  {
+    "lang": "en",
+    "output_path": "pages/en/firm-perspective-building-more-robust-supply-chain-performance.html",
+    "content_path": "src/content/perspective/en/firm-perspective-building-more-robust-supply-chain-performance.html",
+    "title": "Supply chain firm perspective 2026-2036 | Pinnacle Advisors",
+    "meta_description": "Supply chain perspective for 2026-2036 covering resilience, driving forces, recommendations and the strategic steering grid.",
+    "canonical": "/pages/en/firm-perspective-building-more-robust-supply-chain-performance.html",
+    "hreflang_fr": "/pages/fr/perspective-cabinet-performance-supply-chain-robuste.html",
+    "hreflang_en": "/pages/en/firm-perspective-building-more-robust-supply-chain-performance.html",
+    "hreflang_default": "/index.html",
+    "fr_href": "../fr/perspective-cabinet-performance-supply-chain-robuste.html",
+    "en_href": "../en/firm-perspective-building-more-robust-supply-chain-performance.html"
+  }
+]

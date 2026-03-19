@@ -191,7 +191,7 @@ function setupContextCarouselLoop() {
     return;
   }
 
-  const cloneCount = Math.min(2, originalCards.length);
+  const cloneCount = originalCards.length;
   const headClones = originalCards.slice(-cloneCount).map((card) => {
     const clone = card.cloneNode(true);
     clone.dataset.clone = "true";
@@ -344,15 +344,23 @@ function recalculateContextLoopSpan() {
 function normalizeContextCarouselLoop() {
   if (!contextCarouselViewport || !contextRealCards.length || !contextLoopSpan) return;
 
+  const realCount = contextRealCards.length;
+  const firstTailClone = contextAllCards[realCount * 2];
   const firstReal = contextRealCards[0];
-  const lastReal = contextRealCards[contextRealCards.length - 1];
+  if (!firstTailClone) return;
+
   const currentLeft = contextCarouselViewport.scrollLeft;
   const threshold = firstReal.offsetWidth * 0.6;
+  const loopStart = firstReal.offsetLeft;
+  const loopEndStart = firstTailClone.offsetLeft;
+  const maxScrollLeft = contextCarouselViewport.scrollWidth - contextCarouselViewport.clientWidth;
+  const nearNativeRightEdge = currentLeft >= maxScrollLeft - threshold;
+  const nearLoopLeftEdge = currentLeft < loopStart - threshold;
+  const nearLoopRightEdge = currentLeft >= loopEndStart - threshold;
 
-  if (currentLeft < firstReal.offsetLeft - threshold) {
-    contextCarouselViewport.scrollLeft = currentLeft + contextLoopSpan;
-  } else if (currentLeft > lastReal.offsetLeft + threshold) {
-    contextCarouselViewport.scrollLeft = currentLeft - contextLoopSpan;
+  if (nearLoopLeftEdge || nearLoopRightEdge || nearNativeRightEdge) {
+    const offsetWithinLoop = ((currentLeft - loopStart) % contextLoopSpan + contextLoopSpan) % contextLoopSpan;
+    contextCarouselViewport.scrollLeft = loopStart + offsetWithinLoop;
   }
 }
 
@@ -390,8 +398,7 @@ setupContextCarouselLoop();
 recalculateContextLoopSpan();
 
 if (contextCarouselViewport && contextRealCards.length) {
-  const initialIndex = contextRealCards.length > 2 ? 1 : 0;
-  contextCarouselViewport.scrollLeft = contextRealCards[initialIndex].offsetLeft;
+  contextCarouselViewport.scrollLeft = contextRealCards[0].offsetLeft;
 }
 
 updateContextGlide();
